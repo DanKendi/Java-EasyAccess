@@ -2,10 +2,10 @@ package br.com.easyaccess.easyaccess.entity;
 
 import jakarta.persistence.*;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "RESERVA")
+@Table(name = "T_EA_RESERVA")
 public class Reserva {
 
     @Id
@@ -13,13 +13,10 @@ public class Reserva {
     private Long id;
 
     @Column(nullable = false)
-    private LocalDate data;
+    private LocalDateTime data;
 
     @Column(nullable = false)
     private String status;
-
-    @Column(nullable = false, name = "valor_total")
-    private double valorTotal;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "morador_id")
@@ -29,19 +26,16 @@ public class Reserva {
     @JoinColumn(name = "area_comum_id")
     private AreaComum areaComum;
 
-    @ManyToOne(optional = true)
-    @JoinColumn(name = "vaga_visitante_id")
-    private VagaVisitante vagaVisitante;
 
     public Long getId() {
         return id;
     }
 
-    public LocalDate getData() {
+    public LocalDateTime getData() {
         return data;
     }
 
-    public void setData(LocalDate data) {
+    public void setData(LocalDateTime data) {
         this.data = data;
     }
 
@@ -51,14 +45,6 @@ public class Reserva {
 
     public void setStatus(String status) {
         this.status = status;
-    }
-
-    public double getValorTotal() {
-        return valorTotal;
-    }
-
-    public void setValorTotal(double valorTotal) {
-        this.valorTotal = valorTotal;
     }
 
     public Morador getMorador() {
@@ -77,11 +63,4 @@ public class Reserva {
         this.areaComum = areaComum;
     }
 
-    public VagaVisitante getVagaVisitante() {
-        return vagaVisitante;
-    }
-
-    public void setVagaVisitante(VagaVisitante vagaVisitante) {
-        this.vagaVisitante = vagaVisitante;
-    }
 }

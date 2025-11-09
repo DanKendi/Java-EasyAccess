@@ -1,24 +1,24 @@
-package br.com.easyaccess.easyaccess.entity;
+package br.com.easyaccess.easyaccess.controller.dto;
 
-import jakarta.persistence.*;
+public class CondominioResponseDTO {
 
-@Entity
-@Table(name = "T_EA_CONDOMIONIO")
-public class Condominio {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_condominio")
     private Long id;
 
-    @Column(nullable = false)
     private String nome;
 
-    @Column(nullable = false)
     private String endereco;
 
-    @Column(nullable = false)
     private String numero;
+
+    public CondominioResponseDTO() {
+    }
+
+    public CondominioResponseDTO(Long id, String nome, String endereco, String numero) {
+        this.id = id;
+        this.nome = nome;
+        this.endereco = endereco;
+        this.numero = numero;
+    }
 
     public Long getId() {
         return id;
@@ -47,5 +47,4 @@ public class Condominio {
     public void setNumero(String numero) {
         this.numero = numero;
     }
-
 }

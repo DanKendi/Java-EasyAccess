@@ -49,6 +49,7 @@ Para rodar os testes:
 ./gradlew test
 ```
 
-## Contato
-Desenvolvido por [Seu Nome].
-Email: seu.email@dominio.com
+## Integrantes
+Daniel K S Araki - 553043
+Jonas K Isiki - 560560
+Marcos V A Marques - 560475

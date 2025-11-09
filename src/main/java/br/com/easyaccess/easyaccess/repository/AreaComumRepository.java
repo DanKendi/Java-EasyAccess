@@ -7,7 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface AreaComumRepository extends JpaRepository<AreaComum, Long> {
 
-    Page<AreaComum> findByNomeAreaIgnoreCase(String nomeArea,Pageable pageable);
-
+//    Page<AreaComum> findByNomeAreaIgnoreCase(String nomeArea,Pageable pageable);
 
 }
