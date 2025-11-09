@@ -1,5 +1,7 @@
 package br.com.easyaccess.easyaccess.controller;
 
+import br.com.easyaccess.easyaccess.controller.dto.AreaComumRequestDTO;
+import br.com.easyaccess.easyaccess.controller.dto.AreaComumResponseDTO;
 import br.com.easyaccess.easyaccess.entity.AreaComum;
 import br.com.easyaccess.easyaccess.service.AreaComumService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,26 +18,26 @@ public class AreaComumController {
     private AreaComumService areaComumService;
 
     @GetMapping
-    public List<AreaComum> listarTodos(){
+    public List<AreaComumResponseDTO> listarTodos(){
         return areaComumService.buscarTodas();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<AreaComum> buscarPorId(@PathVariable Long id){
+    public ResponseEntity<AreaComumResponseDTO> buscarPorId(@PathVariable Long id){
         return areaComumService.buscarPorId(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public AreaComum criar(@RequestBody AreaComum areaComum){
-        return areaComumService.salvar(areaComum);
+    public AreaComumResponseDTO criar(@RequestBody AreaComumRequestDTO requestDTO){
+        return areaComumService.salvarArea(requestDTO);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<AreaComum> atualizar(@PathVariable Long id, @RequestBody AreaComum areaComum){
+    public ResponseEntity<AreaComumResponseDTO> atualizar(@PathVariable Long id, @RequestBody AreaComumRequestDTO requestDTO){
         try {
-            return ResponseEntity.ok(areaComumService.atualizar(id, areaComum));
+            return ResponseEntity.ok(areaComumService.atualizar(id, requestDTO));
         } catch (RuntimeException e){
             return ResponseEntity.notFound().build();
         }

@@ -1,5 +1,7 @@
 package br.com.easyaccess.easyaccess.controller;
 
+import br.com.easyaccess.easyaccess.controller.dto.CondominioRequestDTO;
+import br.com.easyaccess.easyaccess.controller.dto.CondominioResponseDTO;
 import br.com.easyaccess.easyaccess.entity.Condominio;
 import br.com.easyaccess.easyaccess.service.CondominioService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,26 +18,26 @@ public class CondominioController {
     private CondominioService condominioService;
 
     @GetMapping
-    public List<Condominio> listarTodos(){
+    public List<CondominioResponseDTO> listarTodos(){
         return condominioService.buscarTodos();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Condominio> buscarPorId(@PathVariable Long id){
+    public ResponseEntity<CondominioResponseDTO> buscarPorId(@PathVariable Long id){
         return condominioService.buscarPorId(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public Condominio criar(@RequestBody Condominio condominio){
-        return condominioService.salvar(condominio);
+    public CondominioResponseDTO criar(@RequestBody CondominioRequestDTO requestDTO){
+        return condominioService.salvarCondominio(requestDTO);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Condominio> atualizar(@PathVariable Long id, @RequestBody Condominio condominio){
+    public ResponseEntity<CondominioResponseDTO> atualizar(@PathVariable Long id, @RequestBody CondominioRequestDTO requestDTO){
         try {
-            return ResponseEntity.ok(condominioService.atualizar(id, condominio));
+            return ResponseEntity.ok(condominioService.atualizar(id, requestDTO));
         } catch (RuntimeException e){
             return ResponseEntity.notFound().build();
         }

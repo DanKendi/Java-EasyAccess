@@ -5,8 +5,8 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 
 @Entity
-@Table(name = "USUARIO_SISTEMA")
-public class UsuarioSistema {
+@Table(name = "T_EA_USUARIO")
+public class Usuario {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,8 +19,8 @@ public class UsuarioSistema {
     @Email
     private String email;
 
-    @Column(nullable = false)
-    private String senha;
+    @Column(nullable = false, name = "senha_hash")
+    private String senhaHash;
 
     @Column(nullable = false)
     private String perfil;
@@ -48,12 +48,12 @@ public class UsuarioSistema {
         this.email = email;
     }
 
-    public String getSenha() {
-        return senha;
+    public String getSenhaHash() {
+        return senhaHash;
     }
 
-    public void setSenha(String senha) {
-        this.senha = senha;
+    public void setSenhaHash(String senhaHash) {
+        this.senhaHash = senhaHash;
     }
 
     public String getPerfil() {
@@ -62,10 +62,6 @@ public class UsuarioSistema {
 
     public void setPerfil(String perfil) {
         this.perfil = perfil;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getCpf() {

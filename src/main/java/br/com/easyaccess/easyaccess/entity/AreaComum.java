@@ -4,15 +4,16 @@ package br.com.easyaccess.easyaccess.entity;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "AREA_COMUM")
+@Table(name = "T_EA_AREA_COMUM")
 public class AreaComum {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_area")
     private Long id;
 
-    @Column(nullable = false, name = "nome_area")
-    private String nomeArea;
+    @Column(nullable = false)
+    private String nome;
 
     @Column
     private String descricao;
@@ -28,12 +29,12 @@ public class AreaComum {
         return id;
     }
 
-    public String getNomeArea() {
-        return nomeArea;
+    public String getNome() {
+        return nome;
     }
 
-    public void setNomeArea(String nomeArea) {
-        this.nomeArea = nomeArea;
+    public void setNome(String nome) {
+        this.nome = nome;
     }
 
     public String getDescricao() {

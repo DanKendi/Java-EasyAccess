@@ -1,6 +1,8 @@
 package br.com.easyaccess.easyaccess.controller;
 
 
+import br.com.easyaccess.easyaccess.controller.dto.ReservaRequestDTO;
+import br.com.easyaccess.easyaccess.controller.dto.ReservaResponseDTO;
 import br.com.easyaccess.easyaccess.entity.Reserva;
 import br.com.easyaccess.easyaccess.service.ReservaService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,26 +19,26 @@ public class ReservaController {
     private ReservaService reservaService;
 
     @GetMapping
-    public List<Reserva> listarTodos(){
-        return reservaService.buscarTodos();
+    public List<ReservaResponseDTO> listarTodos(){
+        return reservaService.buscarTodas();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Reserva> buscarPorId(@PathVariable Long id){
+    public ResponseEntity<ReservaResponseDTO> buscarPorId(@PathVariable Long id){
         return reservaService.buscarPorId(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public Reserva criar(@RequestBody Reserva reserva){
-        return reservaService.salvar(reserva);
+    public ReservaResponseDTO criar(@RequestBody ReservaRequestDTO requestDTO){
+        return reservaService.salvarReserva(requestDTO);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Reserva> atualizar(@PathVariable Long id, @RequestBody Reserva reserva){
+    public ResponseEntity<ReservaResponseDTO> atualizar(@PathVariable Long id, @RequestBody ReservaRequestDTO requestDTO){
         try {
-            return ResponseEntity.ok(reservaService.atualizar(id, reserva));
+            return ResponseEntity.ok(reservaService.atualizar(id, requestDTO));
         } catch (RuntimeException e){
             return ResponseEntity.notFound().build();
         }
