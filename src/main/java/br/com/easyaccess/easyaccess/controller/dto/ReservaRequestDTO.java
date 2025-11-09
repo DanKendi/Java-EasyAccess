@@ -2,27 +2,27 @@ package br.com.easyaccess.easyaccess.controller.dto;
 
 import jakarta.validation.constraints.NotNull;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 
 public class ReservaRequestDTO {
 
     @NotNull
-    private LocalDateTime data;
+    private Date data;
 
     @NotNull
     private String status;
 
     @NotNull
-    private Long moradorId;
+    private Integer moradorId;
 
     @NotNull
-    private Long areaComumId;
+    private Integer areaComumId;
 
-    public LocalDateTime getData() {
+    public Date getData() {
         return data;
     }
 
-    public void setData(LocalDateTime data) {
+    public void setData(Date data) {
         this.data = data;
     }
 
@@ -34,19 +34,19 @@ public class ReservaRequestDTO {
         this.status = status;
     }
 
-    public Long getMoradorId() {
+    public Integer getMoradorId() {
         return moradorId;
     }
 
-    public void setMoradorId(Long moradorId) {
+    public void setMoradorId(Integer moradorId) {
         this.moradorId = moradorId;
     }
 
-    public Long getAreaComumId() {
+    public Integer getAreaComumId() {
         return areaComumId;
     }
 
-    public void setAreaComumId(Long areaComumId) {
+    public void setAreaComumId(Integer areaComumId) {
         this.areaComumId = areaComumId;
     }
 }

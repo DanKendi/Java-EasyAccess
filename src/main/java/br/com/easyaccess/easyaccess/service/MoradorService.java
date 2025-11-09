@@ -9,6 +9,8 @@ import br.com.easyaccess.easyaccess.entity.Usuario;
 import br.com.easyaccess.easyaccess.repository.CondominioRepository;
 import br.com.easyaccess.easyaccess.repository.MoradorRepository;
 import br.com.easyaccess.easyaccess.repository.UsuarioRepository;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,6 +32,8 @@ public class MoradorService {
 
     public MoradorResponseDTO salvarMorador(MoradorRequestDTO request){
         Morador morador = toEntity(request);
+        Integer proximoId = buscarProximoId();
+        morador.setId(proximoId);
         Morador moradorSalvo = moradorRepository.save(morador);
         return toRespDTO(moradorSalvo);
     }
@@ -41,20 +45,20 @@ public class MoradorService {
                 .collect(Collectors.toList());
     }
 
-    public Optional<MoradorResponseDTO> buscarPorId(Long id){
-        return moradorRepository.findById(id).map(this::toRespDTO);
+    public Optional<MoradorResponseDTO> buscarPorId(Integer id){
+        return moradorRepository.findById(Long.valueOf(id)).map(this::toRespDTO);
     }
 
-    public MoradorResponseDTO atualizar(Long id, MoradorRequestDTO requestDTO){
-        return moradorRepository.findById(id)
+    public MoradorResponseDTO atualizar(Integer id, MoradorRequestDTO requestDTO){
+        return moradorRepository.findById(Long.valueOf(id))
                 .map(morador -> {
                     if (requestDTO.getUsuarioId() != null){
-                        Usuario usuario = usuarioRepository.findById(requestDTO.getUsuarioId())
+                        Usuario usuario = usuarioRepository.findById(Long.valueOf(requestDTO.getUsuarioId()))
                                 .orElseThrow(() -> new RuntimeException("Usuario nao encontrado"));
                         morador.setUsuario(usuario);
                     }
                     if (requestDTO.getCondominioId() != null){
-                        Condominio condominio = condominioRepository.findById(requestDTO.getCondominioId())
+                        Condominio condominio = condominioRepository.findById(Long.valueOf(requestDTO.getCondominioId()))
                                 .orElseThrow(() -> new RuntimeException("Condominio nao encontrado"));
                         morador.setCondominio(condominio);
                     }
@@ -67,8 +71,8 @@ public class MoradorService {
                 .orElseThrow(() -> new RuntimeException("Morador não encontrado!"));
     }
 
-    public void deletar(Long id){
-        moradorRepository.deleteById(id);
+    public void deletar(Integer id){
+        moradorRepository.deleteById(Long.valueOf(id));
     }
 
     private MoradorResponseDTO toRespDTO(Morador morador){
@@ -83,19 +87,27 @@ public class MoradorService {
 
     private Morador toEntity(MoradorRequestDTO request){
         Morador morador = new Morador();
+        morador.setStatus(request.getStatus());
+        morador.setDataEntrada(request.getDataEntrada());
         if (request.getUsuarioId() != null){
-            Usuario usuario = usuarioRepository.findById(request.getUsuarioId())
+            Usuario usuario = usuarioRepository.findById(Long.valueOf(request.getUsuarioId()))
                     .orElseThrow(() -> new RuntimeException("Usuario nao encontrado"));
             morador.setUsuario(usuario);
         }
 
         if (request.getCondominioId() != null){
-            Condominio condominio = condominioRepository.findById(request.getCondominioId())
+            Condominio condominio = condominioRepository.findById(Long.valueOf(request.getCondominioId()))
                     .orElseThrow(() -> new RuntimeException("Condominio nao encontrado"));
             morador.setCondominio(condominio);
         }
-        morador.setStatus(request.getStatus());
-        morador.setDataEntrada(request.getDataEntrada());
         return morador;
+    }
+
+    @Autowired
+    private EntityManager entityManager;
+
+    private Integer buscarProximoId() {
+        Query query = entityManager.createNativeQuery("SELECT NVL(MAX(ID_MORADOR), 0) + 1 FROM T_EA_MORADOR");
+        return ((Number) query.getSingleResult()).intValue();
     }
 }

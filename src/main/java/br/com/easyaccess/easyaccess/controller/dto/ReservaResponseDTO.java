@@ -1,19 +1,19 @@
 package br.com.easyaccess.easyaccess.controller.dto;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 
 public class ReservaResponseDTO {
 
-    private Long id;
-    private LocalDateTime data;
+    private Integer id;
+    private Date data;
     private String status;
-    private Long moradorId;
-    private Long areaComumId;
+    private Integer moradorId;
+    private Integer areaComumId;
 
     public ReservaResponseDTO() {
     }
 
-    public ReservaResponseDTO(Long id, LocalDateTime data, String status, Long moradorId, Long areaComumId) {
+    public ReservaResponseDTO(Integer id, Date data, String status, Integer moradorId, Integer areaComumId) {
         this.id = id;
         this.data = data;
         this.status = status;
@@ -21,15 +21,15 @@ public class ReservaResponseDTO {
         this.areaComumId = areaComumId;
     }
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public LocalDateTime getData() {
+    public Date getData() {
         return data;
     }
 
-    public void setData(LocalDateTime data) {
+    public void setData(Date data) {
         this.data = data;
     }
 
@@ -41,19 +41,19 @@ public class ReservaResponseDTO {
         this.status = status;
     }
 
-    public Long getMoradorId() {
+    public Integer getMoradorId() {
         return moradorId;
     }
 
-    public void setMoradorId(Long moradorId) {
+    public void setMoradorId(Integer moradorId) {
         this.moradorId = moradorId;
     }
 
-    public Long getAreaComumId() {
+    public Integer getAreaComumId() {
         return areaComumId;
     }
 
-    public void setAreaComumId(Long areaComumId) {
+    public void setAreaComumId(Integer areaComumId) {
         this.areaComumId = areaComumId;
     }
 }

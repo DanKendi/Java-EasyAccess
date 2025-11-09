@@ -19,24 +19,24 @@ public class ReservaController {
     private ReservaService reservaService;
 
     @GetMapping
-    public List<ReservaResponseDTO> listarTodos(){
+    public List<ReservaResponseDTO> listarTodasReservas(){
         return reservaService.buscarTodas();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ReservaResponseDTO> buscarPorId(@PathVariable Long id){
+    public ResponseEntity<ReservaResponseDTO> buscarReservaPorId(@PathVariable Integer id){
         return reservaService.buscarPorId(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public ReservaResponseDTO criar(@RequestBody ReservaRequestDTO requestDTO){
+    public ReservaResponseDTO criarReserva(@RequestBody ReservaRequestDTO requestDTO){
         return reservaService.salvarReserva(requestDTO);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ReservaResponseDTO> atualizar(@PathVariable Long id, @RequestBody ReservaRequestDTO requestDTO){
+    public ResponseEntity<ReservaResponseDTO> atualizarReserva(@PathVariable Integer id, @RequestBody ReservaRequestDTO requestDTO){
         try {
             return ResponseEntity.ok(reservaService.atualizar(id, requestDTO));
         } catch (RuntimeException e){
@@ -45,7 +45,7 @@ public class ReservaController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletar(@PathVariable Long id){
+    public ResponseEntity<Void> deletarReserva(@PathVariable Integer id){
         reservaService.deletar(id);
         return ResponseEntity.noContent().build();
     }

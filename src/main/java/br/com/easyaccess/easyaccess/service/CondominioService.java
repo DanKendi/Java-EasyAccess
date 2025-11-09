@@ -4,6 +4,9 @@ import br.com.easyaccess.easyaccess.controller.dto.CondominioRequestDTO;
 import br.com.easyaccess.easyaccess.controller.dto.CondominioResponseDTO;
 import br.com.easyaccess.easyaccess.entity.Condominio;
 import br.com.easyaccess.easyaccess.repository.CondominioRepository;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.Query;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,38 +20,49 @@ public class CondominioService {
     @Autowired
     private CondominioRepository condominioRepository;
 
-    public CondominioResponseDTO salvarCondominio(CondominioRequestDTO requestDTO){
-        Condominio cond = toEntity(requestDTO);
-        Condominio condominioSalvo = condominioRepository.save(cond);
-        return toRespDTO(condominioSalvo);
+    @Transactional
+    public void salvarCondominio(CondominioRequestDTO requestDTO){
+        Integer proximoId = buscarProximoId();
+        Query query = entityManager.createNativeQuery(
+                "CALL SP_INS_CONDOMINIO(:id_condominio, :nome, :endereco, :numero)"
+        );
+        query.setParameter("id_condominio", proximoId);
+        query.setParameter("nome", requestDTO.getNome());
+        query.setParameter("endereco", requestDTO.getEndereco());
+        query.setParameter("numero", requestDTO.getNumero());
+        query.executeUpdate();
     }
 
-    public List<CondominioResponseDTO> buscarTodos(){
+    public List<CondominioResponseDTO> buscarTodosCondominios(){
         return condominioRepository.findAll()
                 .stream()
                 .map(this::toRespDTO)
                 .collect(Collectors.toList());
     }
 
-    public Optional<CondominioResponseDTO> buscarPorId(Long id){
-        return condominioRepository.findById(id).map(this::toRespDTO);
+    public Optional<CondominioResponseDTO> buscarCondominioPorId(Integer id){
+        return condominioRepository.findById(Long.valueOf(id)).map(this::toRespDTO);
     }
 
-    public CondominioResponseDTO atualizar(Long id, CondominioRequestDTO requestDTO){
-        return condominioRepository.findById(id)
-                .map(condominio -> {
-                    condominio.setNome(requestDTO.getNome());
-                    condominio.setEndereco(requestDTO.getEndereco());
-                    condominio.setNumero(requestDTO.getNumero());
-
-                    Condominio condominioSalvo = condominioRepository.save(condominio);
-                    return toRespDTO(condominioSalvo);
-                })
-                .orElseThrow(() -> new RuntimeException("Condomínio não encontrado!"));
+    @Transactional
+    public void atualizarCondominio(Integer id, CondominioRequestDTO requestDTO){
+        Query query = entityManager.createNativeQuery(
+                "CALL SP_UPD_CONDOMINIO(:id_condominio, :nome, :endereco, :numero)"
+        );
+        query.setParameter("id_condominio", id);
+        query.setParameter("nome", requestDTO.getNome());
+        query.setParameter("endereco", requestDTO.getEndereco());
+        query.setParameter("numero", requestDTO.getNumero());
+        query.executeUpdate();
     }
 
-    public void deletar(Long id){
-        condominioRepository.deleteById(id);
+    @Transactional
+    public void deletarCondominio(Integer id){
+        Query query = entityManager.createNativeQuery(
+                "CALL SP_DEL_CONDOMINIO(:id_condominio)"
+        );
+        query.setParameter("id_condominio", id);
+        query.executeUpdate();
     }
 
     private CondominioResponseDTO toRespDTO(Condominio condominio){
@@ -66,6 +80,14 @@ public class CondominioService {
         cond.setEndereco(request.getEndereco());
         cond.setNumero(request.getNumero());
         return cond;
+    }
+
+    @Autowired
+    private EntityManager entityManager;
+
+    private Integer buscarProximoId() {
+        Query query = entityManager.createNativeQuery("SELECT NVL(MAX(ID_CONDOMINIO), 0) + 1 FROM T_EA_CONDOMINIO");
+        return  ((Number) query.getSingleResult()).intValue();
     }
 
 }

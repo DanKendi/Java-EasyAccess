@@ -2,7 +2,7 @@ package br.com.easyaccess.easyaccess.controller.dto;
 
 public class UsuarioResponseDTO {
 
-    private Long id;
+    private Integer id;
 
     private String nome;
 
@@ -12,21 +12,19 @@ public class UsuarioResponseDTO {
 
     private String perfil;
 
-    private String cpf;
 
     public UsuarioResponseDTO() {
     }
 
-    public UsuarioResponseDTO(Long id, String nome, String email, String senhaHash, String perfil, String cpf) {
+    public UsuarioResponseDTO(Integer id, String nome, String email, String senhaHash, String perfil) {
         this.id = id;
         this.nome = nome;
         this.email = email;
         this.senhaHash = senhaHash;
         this.perfil = perfil;
-        this.cpf = cpf;
     }
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
@@ -63,11 +61,4 @@ public class UsuarioResponseDTO {
         this.perfil = perfil;
     }
 
-    public String getCpf() {
-        return cpf;
-    }
-
-    public void setCpf(String cpf) {
-        this.cpf = cpf;
-    }
 }

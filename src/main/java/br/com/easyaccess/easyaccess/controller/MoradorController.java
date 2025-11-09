@@ -23,7 +23,7 @@ public class MoradorController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<MoradorResponseDTO> buscarPorId(@PathVariable Long id){
+    public ResponseEntity<MoradorResponseDTO> buscarPorId(@PathVariable Integer id){
         return moradorService.buscarPorId(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
@@ -35,7 +35,7 @@ public class MoradorController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<MoradorResponseDTO> atualizar(@PathVariable Long id, @RequestBody MoradorRequestDTO requestDTO){
+    public ResponseEntity<MoradorResponseDTO> atualizar(@PathVariable Integer id, @RequestBody MoradorRequestDTO requestDTO){
         try {
             return ResponseEntity.ok(moradorService.atualizar(id, requestDTO));
         } catch (RuntimeException e){
@@ -44,7 +44,7 @@ public class MoradorController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletar(@PathVariable Long id){
+    public ResponseEntity<Void> deletar(@PathVariable Integer id){
         moradorService.deletar(id);
         return ResponseEntity.noContent().build();
     }

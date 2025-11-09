@@ -9,13 +9,13 @@ import jakarta.validation.constraints.Email;
 public class Usuario {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(name = "ID_USUARIO")
+    private Integer id;
 
     @Column(nullable = false)
     private String nome;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     @Email
     private String email;
 
@@ -25,11 +25,12 @@ public class Usuario {
     @Column(nullable = false)
     private String perfil;
 
-    @Column(nullable = false, unique = true)
-    private String cpf;
-
-    public Long getId() {
+    public Integer getId() {
         return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getNome() {
@@ -64,11 +65,4 @@ public class Usuario {
         this.perfil = perfil;
     }
 
-    public String getCpf() {
-        return cpf;
-    }
-
-    public void setCpf(String cpf) {
-        this.cpf = cpf;
-    }
 }

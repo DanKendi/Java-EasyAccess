@@ -18,9 +18,6 @@ public class UsuarioRequestDTO {
     @NotNull
     private String perfil;
 
-    @NotNull
-    private String cpf;
-
     public String getNome() {
         return nome;
     }
@@ -53,11 +50,4 @@ public class UsuarioRequestDTO {
         this.perfil = perfil;
     }
 
-    public String getCpf() {
-        return cpf;
-    }
-
-    public void setCpf(String cpf) {
-        this.cpf = cpf;
-    }
 }
