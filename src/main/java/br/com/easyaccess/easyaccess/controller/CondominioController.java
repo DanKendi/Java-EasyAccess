@@ -5,6 +5,7 @@ import br.com.easyaccess.easyaccess.controller.dto.CondominioResponseDTO;
 import br.com.easyaccess.easyaccess.entity.Condominio;
 import br.com.easyaccess.easyaccess.service.CondominioService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,34 +19,40 @@ public class CondominioController {
     private CondominioService condominioService;
 
     @GetMapping
-    public List<CondominioResponseDTO> listarTodos(){
-        return condominioService.buscarTodos();
+    public List<CondominioResponseDTO> listarTodosCondominios(){
+        return condominioService.buscarTodosCondominios();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<CondominioResponseDTO> buscarPorId(@PathVariable Long id){
-        return condominioService.buscarPorId(id)
+    public ResponseEntity<CondominioResponseDTO> buscarCondominioPorId(@PathVariable Integer id){
+        return condominioService.buscarCondominioPorId(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public CondominioResponseDTO criar(@RequestBody CondominioRequestDTO requestDTO){
-        return condominioService.salvarCondominio(requestDTO);
+    public ResponseEntity<Void> criarCondominio(@RequestBody CondominioRequestDTO requestDTO){
+        // O service apenas executa a procedure
+        condominioService.salvarCondominio(requestDTO);
+
+        // Retorna 201 Created. Como não temos o ID gerado (a procedure não retorna),
+        // não podemos retornar o objeto completo nem a URI do novo recurso.
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<CondominioResponseDTO> atualizar(@PathVariable Long id, @RequestBody CondominioRequestDTO requestDTO){
+    public ResponseEntity<Void> atualizarCondominio(@PathVariable Integer id, @RequestBody CondominioRequestDTO requestDTO){
         try {
-            return ResponseEntity.ok(condominioService.atualizar(id, requestDTO));
+            condominioService.atualizarCondominio(id, requestDTO);
+            return ResponseEntity.noContent().build();
         } catch (RuntimeException e){
             return ResponseEntity.notFound().build();
         }
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletar(@PathVariable Long id){
-        condominioService.deletar(id);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<Void> deletarCondominio(@PathVariable Integer id){
+        condominioService.deletarCondominio(id);
+        return ResponseEntity.noContent().build(); // Retorna 204 No Content
     }
 }

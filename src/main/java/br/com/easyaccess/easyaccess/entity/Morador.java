@@ -3,15 +3,15 @@ package br.com.easyaccess.easyaccess.entity;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @Entity
 @Table(name = "T_EA_MORADOR")
 public class Morador {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_morador")
-    private Long id;
+    private Integer id;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "usuario_id")
@@ -25,10 +25,14 @@ public class Morador {
     private String status;
 
     @Column(nullable = false, name = "data_entrada")
-    private LocalDateTime dataEntrada;
+    private Date dataEntrada;
 
-    public Long getId() {
+    public Integer getId() {
         return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public Condominio getCondominio() {
@@ -55,11 +59,11 @@ public class Morador {
         this.status = status;
     }
 
-    public LocalDateTime getDataEntrada() {
+    public Date getDataEntrada() {
         return dataEntrada;
     }
 
-    public void setDataEntrada(LocalDateTime dataEntrada) {
+    public void setDataEntrada(Date dataEntrada) {
         this.dataEntrada = dataEntrada;
     }
 }

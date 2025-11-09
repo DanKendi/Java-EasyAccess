@@ -7,6 +7,8 @@ import br.com.easyaccess.easyaccess.entity.AreaComum;
 import br.com.easyaccess.easyaccess.entity.Condominio;
 import br.com.easyaccess.easyaccess.repository.AreaComumRepository;
 import br.com.easyaccess.easyaccess.repository.CondominioRepository;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,23 +27,25 @@ public class AreaComumService {
 
     public AreaComumResponseDTO salvarArea(AreaComumRequestDTO request){
         AreaComum areaComum = toEntity(request);
+        Integer proximoId = buscarProximoId();
+        areaComum.setId(proximoId);
         AreaComum areaComumSalva = areaComumRepository.save(areaComum);
         return toRespDTO(areaComumSalva);
     }
 
-    public List<AreaComumResponseDTO> buscarTodas(){
+    public List<AreaComumResponseDTO> buscarTodasAreas(){
         return areaComumRepository.findAll()
                 .stream()
                 .map(this::toRespDTO)
                 .collect(Collectors.toList());
     }
 
-    public Optional<AreaComumResponseDTO> buscarPorId(Long id){
-        return areaComumRepository.findById(id).map(this::toRespDTO);
+    public Optional<AreaComumResponseDTO> buscarAreaPorId(Integer id){
+        return areaComumRepository.findById(Long.valueOf(id)).map(this::toRespDTO);
     }
 
-    public AreaComumResponseDTO atualizar(Long id, AreaComumRequestDTO requestDTO){
-        return areaComumRepository.findById(id)
+    public AreaComumResponseDTO atualizarArea(Integer id, AreaComumRequestDTO requestDTO){
+        return areaComumRepository.findById(Long.valueOf(id))
                 .map(areaComum -> {
                     areaComum.setNome(requestDTO.getNome());
                     areaComum.setDescricao(requestDTO.getDescricao());
@@ -57,8 +61,8 @@ public class AreaComumService {
                 .orElseThrow(() -> new RuntimeException("Área comum não encontrada!"));
     }
 
-    public void deletar(Long id){
-        areaComumRepository.deleteById(id);
+    public void deletar(Integer id){
+        areaComumRepository.deleteById(Long.valueOf(id));
     }
 
     private AreaComumResponseDTO toRespDTO(AreaComum areaComum){
@@ -82,5 +86,13 @@ public class AreaComumService {
             areaC.setCondominio(condominio);
         }
         return areaC;
+    }
+
+    @Autowired
+    private EntityManager entityManager;
+
+    private Integer buscarProximoId() {
+        Query query = entityManager.createNativeQuery("SELECT NVL(MAX(ID_AREA), 0) + 1 FROM T_EA_AREA_COMUM");
+        return ((Number) query.getSingleResult()).intValue();
     }
 }

@@ -18,33 +18,33 @@ public class AreaComumController {
     private AreaComumService areaComumService;
 
     @GetMapping
-    public List<AreaComumResponseDTO> listarTodos(){
-        return areaComumService.buscarTodas();
+    public List<AreaComumResponseDTO> listarTodasAreas(){
+        return areaComumService.buscarTodasAreas();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<AreaComumResponseDTO> buscarPorId(@PathVariable Long id){
-        return areaComumService.buscarPorId(id)
+    public ResponseEntity<AreaComumResponseDTO> buscarAreaPorId(@PathVariable Integer id){
+        return areaComumService.buscarAreaPorId(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public AreaComumResponseDTO criar(@RequestBody AreaComumRequestDTO requestDTO){
+    public AreaComumResponseDTO criarArea(@RequestBody AreaComumRequestDTO requestDTO){
         return areaComumService.salvarArea(requestDTO);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<AreaComumResponseDTO> atualizar(@PathVariable Long id, @RequestBody AreaComumRequestDTO requestDTO){
+    public ResponseEntity<AreaComumResponseDTO> atualizarArea(@PathVariable Integer id, @RequestBody AreaComumRequestDTO requestDTO){
         try {
-            return ResponseEntity.ok(areaComumService.atualizar(id, requestDTO));
+            return ResponseEntity.ok(areaComumService.atualizarArea(id, requestDTO));
         } catch (RuntimeException e){
             return ResponseEntity.notFound().build();
         }
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletar(@PathVariable Long id){
+    public ResponseEntity<Void> deletarArea(@PathVariable Integer id){
         areaComumService.deletar(id);
         return ResponseEntity.noContent().build();
     }

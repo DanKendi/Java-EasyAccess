@@ -8,6 +8,8 @@ import br.com.easyaccess.easyaccess.entity.Reserva;
 import br.com.easyaccess.easyaccess.repository.AreaComumRepository;
 import br.com.easyaccess.easyaccess.repository.MoradorRepository;
 import br.com.easyaccess.easyaccess.repository.ReservaRepository;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,6 +31,8 @@ public class ReservaService {
 
     public ReservaResponseDTO salvarReserva(ReservaRequestDTO requestDTO){
         Reserva reserva = toEntity(requestDTO);
+        Integer proximoId = buscarProximoId();
+        reserva.setId(proximoId);
         Reserva reservaSalva = reservaRepository.save(reserva);
         return toRespDTO(reservaSalva);
     }
@@ -40,22 +44,22 @@ public class ReservaService {
                 .collect(Collectors.toList());
     }
 
-    public Optional<ReservaResponseDTO> buscarPorId(Long id){
-        return reservaRepository.findById(id).map(this::toRespDTO);
+    public Optional<ReservaResponseDTO> buscarPorId(Integer id){
+        return reservaRepository.findById(Long.valueOf(id)).map(this::toRespDTO);
     }
 
-    public ReservaResponseDTO atualizar(Long id, ReservaRequestDTO requestDTO){
-        return reservaRepository.findById(id)
+    public ReservaResponseDTO atualizar(Integer id, ReservaRequestDTO requestDTO){
+        return reservaRepository.findById(Long.valueOf(id))
                 .map(reserva -> {
                     reserva.setData(requestDTO.getData());
                     reserva.setStatus(requestDTO.getStatus());
                     if (requestDTO.getMoradorId() != null){
-                        Morador morador = moradorRepository.findById(requestDTO.getMoradorId())
+                        Morador morador = moradorRepository.findById(Long.valueOf(requestDTO.getMoradorId()))
                                 .orElseThrow(() -> new RuntimeException("Morador nao encontrado"));
                         reserva.setMorador(morador);
                     }
                     if (requestDTO.getAreaComumId() != null){
-                        AreaComum areaComum = areaComumRepository.findById(requestDTO.getAreaComumId())
+                        AreaComum areaComum = areaComumRepository.findById(Long.valueOf(requestDTO.getAreaComumId()))
                                 .orElseThrow(() -> new RuntimeException("Area Comum nao encontada"));
                         reserva.setAreaComum(areaComum);
                     }
@@ -65,8 +69,8 @@ public class ReservaService {
                 .orElseThrow(()->new RuntimeException("Reserva não encontrada"));
     }
 
-    public void deletar(Long id){
-        reservaRepository.deleteById(id);
+    public void deletar(Integer id){
+        reservaRepository.deleteById(Long.valueOf(id));
     }
 
     private ReservaResponseDTO toRespDTO(Reserva reserva){
@@ -84,15 +88,23 @@ public class ReservaService {
         reserva.setData(requestDTO.getData());
         reserva.setStatus(requestDTO.getStatus());
         if (requestDTO.getMoradorId() != null){
-            Morador morador = moradorRepository.findById(requestDTO.getMoradorId())
+            Morador morador = moradorRepository.findById(Long.valueOf(requestDTO.getMoradorId()))
                     .orElseThrow(() -> new RuntimeException("Morador nao encontrado"));
             reserva.setMorador(morador);
         }
         if (requestDTO.getAreaComumId() != null){
-            AreaComum areaComum = areaComumRepository.findById(requestDTO.getAreaComumId())
+            AreaComum areaComum = areaComumRepository.findById(Long.valueOf(requestDTO.getAreaComumId()))
                     .orElseThrow(() -> new RuntimeException("Area Comum nao encontada"));
             reserva.setAreaComum(areaComum);
         }
         return reserva;
+    }
+
+    @Autowired
+    private EntityManager entityManager;
+
+    private Integer buscarProximoId() {
+        Query query = entityManager.createNativeQuery("SELECT NVL(MAX(ID_RESERVA), 0) + 1 FROM T_EA_RESERVA");
+        return ((Number) query.getSingleResult()).intValue();
     }
 }

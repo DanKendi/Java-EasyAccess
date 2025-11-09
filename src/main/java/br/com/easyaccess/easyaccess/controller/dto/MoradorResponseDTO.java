@@ -2,20 +2,20 @@ package br.com.easyaccess.easyaccess.controller.dto;
 
 import br.com.easyaccess.easyaccess.entity.Morador;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 
 public class MoradorResponseDTO {
 
-    private Long id;
-    private Long usuarioId;
-    private Long condominioId;
+    private Integer id;
+    private Integer usuarioId;
+    private Integer condominioId;
     private String status;
-    private LocalDateTime dateEntrada;
+    private Date dateEntrada;
 
     public MoradorResponseDTO() {
     }
 
-    public MoradorResponseDTO(Long id, Long usuarioId, Long condominioId, String status, LocalDateTime dateEntrada) {
+    public MoradorResponseDTO(Integer id, Integer usuarioId, Integer condominioId, String status, Date dateEntrada) {
         this.id = id;
         this.usuarioId = usuarioId;
         this.condominioId = condominioId;
@@ -23,23 +23,23 @@ public class MoradorResponseDTO {
         this.dateEntrada = dateEntrada;
     }
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public Long getUsuarioId() {
+    public Integer getUsuarioId() {
         return usuarioId;
     }
 
-    public void setUsuarioId(Long usuarioId) {
+    public void setUsuarioId(Integer usuarioId) {
         this.usuarioId = usuarioId;
     }
 
-    public Long getCondominioId() {
+    public Integer getCondominioId() {
         return condominioId;
     }
 
-    public void setCondominioId(Long condominioId) {
+    public void setCondominioId(Integer condominioId) {
         this.condominioId = condominioId;
     }
 
@@ -51,11 +51,11 @@ public class MoradorResponseDTO {
         this.status = status;
     }
 
-    public LocalDateTime getDateEntrada() {
+    public Date getDateEntrada() {
         return dateEntrada;
     }
 
-    public void setDateEntrada(LocalDateTime dateEntrada) {
+    public void setDateEntrada(Date dateEntrada) {
         this.dateEntrada = dateEntrada;
     }
 }

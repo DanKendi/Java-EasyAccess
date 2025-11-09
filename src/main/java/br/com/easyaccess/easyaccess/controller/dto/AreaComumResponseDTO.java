@@ -2,23 +2,25 @@ package br.com.easyaccess.easyaccess.controller.dto;
 
 import br.com.easyaccess.easyaccess.entity.Condominio;
 
+import java.math.BigDecimal;
+
 public class AreaComumResponseDTO {
 
 
-    private Long id;
+    private Integer id;
 
     private String nome;
 
     private String descricao;
 
-    private Double precoBase;
+    private BigDecimal precoBase;
 
-    private Long condominioId;
+    private Integer condominioId;
 
     public AreaComumResponseDTO() {
     }
 
-    public AreaComumResponseDTO(Long id, String nome, String descricao, Double precoBase, Long condominioId) {
+    public AreaComumResponseDTO(Integer id, String nome, String descricao, BigDecimal precoBase, Integer condominioId) {
         this.id = id;
         this.nome = nome;
         this.descricao = descricao;
@@ -26,7 +28,7 @@ public class AreaComumResponseDTO {
         this.condominioId = condominioId;
     }
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
@@ -46,19 +48,19 @@ public class AreaComumResponseDTO {
         this.descricao = descricao;
     }
 
-    public Double getPrecoBase() {
+    public BigDecimal getPrecoBase() {
         return precoBase;
     }
 
-    public void setPrecoBase(Double precoBase) {
+    public void setPrecoBase(BigDecimal precoBase) {
         this.precoBase = precoBase;
     }
 
-    public Long getCondominioId() {
+    public Integer getCondominioId() {
         return condominioId;
     }
 
-    public void setCondominioId(Long condominioId) {
+    public void setCondominioId(Integer condominioId) {
         this.condominioId = condominioId;
     }
 }

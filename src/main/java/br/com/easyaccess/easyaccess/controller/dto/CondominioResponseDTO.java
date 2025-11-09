@@ -2,7 +2,7 @@ package br.com.easyaccess.easyaccess.controller.dto;
 
 public class CondominioResponseDTO {
 
-    private Long id;
+    private Integer id;
 
     private String nome;
 
@@ -13,14 +13,14 @@ public class CondominioResponseDTO {
     public CondominioResponseDTO() {
     }
 
-    public CondominioResponseDTO(Long id, String nome, String endereco, String numero) {
+    public CondominioResponseDTO(Integer id, String nome, String endereco, String numero) {
         this.id = id;
         this.nome = nome;
         this.endereco = endereco;
         this.numero = numero;
     }
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 

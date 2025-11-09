@@ -4,6 +4,9 @@ import br.com.easyaccess.easyaccess.controller.dto.UsuarioRequestDTO;
 import br.com.easyaccess.easyaccess.controller.dto.UsuarioResponseDTO;
 import br.com.easyaccess.easyaccess.entity.Usuario;
 import br.com.easyaccess.easyaccess.repository.UsuarioRepository;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.Query;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,10 +20,18 @@ public class UsuarioService {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
-    public UsuarioResponseDTO salvarUsuario(UsuarioRequestDTO requestDTO){
-        Usuario usuario = toEntity(requestDTO);
-        Usuario usuarioSalvo = usuarioRepository.save(usuario);
-        return toRespDTO(usuarioSalvo);
+    @Transactional
+    public void salvarUsuario(UsuarioRequestDTO requestDTO){
+        Integer proximoId = buscarProximoId();
+        Query query = entityManager.createNativeQuery(
+                "CALL SP_INS_USUARIO(:id_usuario, :nome, :email, :senha_hash, :perfil)"
+        );
+        query.setParameter("id_usuario", proximoId);
+        query.setParameter("nome", requestDTO.getNome());
+        query.setParameter("email", requestDTO.getEmail());
+        query.setParameter("senha_hash", requestDTO.getSenhaHash());
+        query.setParameter("perfil", requestDTO.getPerfil());
+        query.executeUpdate();
     }
 
     public List<UsuarioResponseDTO> buscarTodos() {
@@ -30,25 +41,31 @@ public class UsuarioService {
                 .collect(Collectors.toList());
     }
 
-    public Optional<UsuarioResponseDTO> buscarPorId(Long id){
-        return usuarioRepository.findById(id).map(this::toRespDTO);
+    public Optional<UsuarioResponseDTO> buscarPorId(Integer id){
+        return usuarioRepository.findById(Long.valueOf(id)).map(this::toRespDTO);
     }
 
-    public UsuarioResponseDTO atualizar(Long id, UsuarioRequestDTO requestDTO){
-        return usuarioRepository.findById(id)
-                .map(usuario -> {
-                    usuario.setNome(requestDTO.getNome());
-                    usuario.setEmail(requestDTO.getEmail());
-                    usuario.setPerfil(requestDTO.getPerfil());
-                    usuario.setSenhaHash(requestDTO.getSenhaHash());
-
-                    Usuario usuarioSalvo = usuarioRepository.save(usuario);
-                    return toRespDTO(usuario);
-                })
-                .orElseThrow(()-> new RuntimeException("Usuário não encotrado!"));
+    @Transactional
+    public void atualizar(Integer id, UsuarioRequestDTO requestDTO){
+        Query query = entityManager.createNativeQuery(
+                "CALL SP_INS_USUARIO(:id_usuario, :nome, :email, :senha_hash, :perfil)"
+        );
+        query.setParameter("id_usuario", id);
+        query.setParameter("nome", requestDTO.getNome());
+        query.setParameter("email", requestDTO.getEmail());
+        query.setParameter("senha_hash", requestDTO.getSenhaHash());
+        query.setParameter("perfil", requestDTO.getPerfil());
+        query.executeUpdate();
     }
 
-    public void deletar(Long id){ usuarioRepository.deleteById(id);}
+    @Transactional
+    public void deletar(Integer id){
+        Query query = entityManager.createNativeQuery(
+                "CALL SP_DEL_USUARIO(:id_usuario)"
+        );
+        query.setParameter("id_usuario", id);
+        query.executeUpdate();
+    }
 
     private UsuarioResponseDTO toRespDTO(Usuario usuario){
         return new UsuarioResponseDTO(
@@ -56,18 +73,24 @@ public class UsuarioService {
             usuario.getNome(),
             usuario.getEmail(),
             usuario.getSenhaHash(),
-            usuario.getPerfil(),
-            usuario.getCpf()
+            usuario.getPerfil()
         );
     }
 
     private Usuario toEntity(UsuarioRequestDTO requestDTO){
         Usuario usuario = new Usuario();
-        requestDTO.setNome(requestDTO.getNome());
-        requestDTO.setEmail(requestDTO.getEmail());
-        requestDTO.setSenhaHash(requestDTO.getSenhaHash());
-        requestDTO.setPerfil(requestDTO.getPerfil());
-        requestDTO.setCpf(requestDTO.getCpf());
+        usuario.setNome(requestDTO.getNome());
+        usuario.setEmail(requestDTO.getEmail());
+        usuario.setSenhaHash(requestDTO.getSenhaHash());
+        usuario.setPerfil(requestDTO.getPerfil());
         return usuario;
+    }
+
+    @Autowired
+    private EntityManager entityManager;
+
+    private Integer buscarProximoId() {
+        Query query = entityManager.createNativeQuery("SELECT NVL(MAX(ID_USUARIO), 0) + 1 FROM T_EA_USUARIO");
+        return ((Number) query.getSingleResult()).intValue();
     }
 }

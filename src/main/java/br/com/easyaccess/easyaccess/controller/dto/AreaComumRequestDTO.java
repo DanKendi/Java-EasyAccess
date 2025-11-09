@@ -2,6 +2,8 @@ package br.com.easyaccess.easyaccess.controller.dto;
 
 import jakarta.validation.constraints.NotNull;
 
+import java.math.BigDecimal;
+
 public class AreaComumRequestDTO {
 
     @NotNull
@@ -10,7 +12,7 @@ public class AreaComumRequestDTO {
     private String descricao;
 
     @NotNull
-    private Double precoBase;
+    private BigDecimal precoBase;
 
     @NotNull
     private Long condominioId;
@@ -31,16 +33,16 @@ public class AreaComumRequestDTO {
         this.descricao = descricao;
     }
 
-    public Double getPrecoBase() {
+    public BigDecimal getPrecoBase() {
         return precoBase;
     }
 
-    public void setPrecoBase(Double precoBase) {
+    public void setPrecoBase(BigDecimal precoBase) {
         this.precoBase = precoBase;
     }
 
     public Long getCondominioId() {
-        return condominioId;
+        return  condominioId;
     }
 
     public void setCondominioId(Long condominioId) {

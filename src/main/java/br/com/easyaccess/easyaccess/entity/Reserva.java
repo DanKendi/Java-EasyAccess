@@ -3,17 +3,18 @@ package br.com.easyaccess.easyaccess.entity;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @Entity
 @Table(name = "T_EA_RESERVA")
 public class Reserva {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(name = "ID_RESERVA")
+    private Integer id;
 
     @Column(nullable = false)
-    private LocalDateTime data;
+    private Date data;
 
     @Column(nullable = false)
     private String status;
@@ -27,15 +28,19 @@ public class Reserva {
     private AreaComum areaComum;
 
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public LocalDateTime getData() {
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public Date getData() {
         return data;
     }
 
-    public void setData(LocalDateTime data) {
+    public void setData(Date data) {
         this.data = data;
     }
 

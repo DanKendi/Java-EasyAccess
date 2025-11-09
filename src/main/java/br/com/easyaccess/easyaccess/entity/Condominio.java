@@ -3,13 +3,12 @@ package br.com.easyaccess.easyaccess.entity;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "T_EA_CONDOMIONIO")
+@Table(name = "T_EA_CONDOMINIO")
 public class Condominio {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_condominio")
-    private Long id;
+    private Integer id;
 
     @Column(nullable = false)
     private String nome;
@@ -20,8 +19,12 @@ public class Condominio {
     @Column(nullable = false)
     private String numero;
 
-    public Long getId() {
+    public Integer getId() {
         return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getNome() {
