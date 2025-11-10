@@ -1,55 +1,54 @@
 # EasyAccess
 
-Sistema de gerenciamento para condomínios, desenvolvido em Java com Spring Boot.
-
-## Descrição
-O EasyAccess é uma aplicação web que facilita o controle de áreas comuns, reservas, moradores, visitantes e usuários do sistema em condomínios residenciais.
-
-## Estrutura do Projeto
-```
-├── src/main/java/br/com/easyaccess/easyaccess/
-│   ├── controller/        # Controllers REST
-│   ├── dto/               # Data Transfer Objects
-│   ├── entity/            # Entidades JPA
-│   ├── repository/        # Repositórios Spring Data
-│   ├── service/           # Serviços de negócio
-│   └── EasyaccessApplication.java # Classe principal
-├── src/main/resources/
-│   ├── application.properties # Configurações
-│   ├── static/                # Arquivos estáticos
-│   └── templates/             # Templates
-├── build.gradle               # Configuração do Gradle
-├── settings.gradle            # Configuração de módulos
-```
-
-## Como executar
-1. Certifique-se de ter o Java 17+ e Gradle instalados.
-2. Execute o comando abaixo na raiz do projeto:
-   ```
-   ./gradlew bootRun
-   ```
-   Ou no Windows:
-   ```
-   gradlew.bat bootRun
-   ```
-3. Acesse `http://localhost:8080` no navegador.
-
-## Dependências principais
-- Spring Boot
-- Spring Data JPA
-- H2 Database (ou configure outro banco em `application.properties`)
-
-## Exemplos de uso
-- Reservar área comum: POST `/reservas`
-- Listar moradores: GET `/moradores`
-
-## Testes
-Para rodar os testes:
-```
-./gradlew test
-```
+Sistema de agendamento e gerenciamento de áreas comuns para condomínios residenciais.
 
 ## Integrantes
-Daniel K S Araki - 553043
-Jonas K Isiki - 560560
-Marcos V A Marques - 560475
+Daniel K S Araki - 553043 - Responsável por Java e Banco de Dados
+
+Jonas K Isiki - 560560 - Responsável por IOT e Mobile
+
+Marcos V A Marques - 560475 - Responsável por Quality Assurence e DevOps
+
+## Público Alvo
+- Condomínios Residenciais com áreas comuns
+- Moradores e Inquilinos
+
+## Soluções do projeto
+- Otimização e simplificação do processos de agendamento e gestão de áreas comuns
+
+## Arquitetura do sistema
+
+<img src="docs/img/imagemArquiteturaEA.jpg" width="650">
+
+## Diagrama Entidade Relacionamento
+
+<img src="docs/img/DER.png" width="60%">
+
+## Listagem dos Endpoints
+
+### Usuário
+<img src="docs/img/endpoint-usuario.png"  width="auto">
+
+### Reserva
+<img src="docs/img/endpoint-reserva.png"  width="auto">
+
+### Morador
+<img src="docs/img/endpoint-morador.png"  width="auto">
+
+### Condomínio
+<img src="docs/img/endpoint-condominio.png"  width="auto">
+
+### Área Comum
+<img src="docs/img/endpoint-area-comum.png"  width="auto">
+
+## Link do vídeo
+
+https://youtu.be/jz47xXI2RmY
+
+
+## Como executar
+1. Navegar até o arquivo EasyaccessApplication
+
+2. Executar o arquivo
+
+3. Acessar `http://localhost:8080` no navegador.
