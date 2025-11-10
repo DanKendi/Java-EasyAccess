@@ -48,7 +48,7 @@ public class UsuarioService {
     @Transactional
     public void atualizar(Integer id, UsuarioRequestDTO requestDTO){
         Query query = entityManager.createNativeQuery(
-                "CALL SP_INS_USUARIO(:id_usuario, :nome, :email, :senha_hash, :perfil)"
+                "CALL SP_UPD_USUARIO(:id_usuario, :nome, :email, :senha_hash, :perfil)"
         );
         query.setParameter("id_usuario", id);
         query.setParameter("nome", requestDTO.getNome());
