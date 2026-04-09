@@ -5,6 +5,8 @@ import br.com.easyaccess.easyaccess.controller.dto.ReservaResponseDTO;
 import br.com.easyaccess.easyaccess.entity.AreaComum;
 import br.com.easyaccess.easyaccess.entity.Morador;
 import br.com.easyaccess.easyaccess.entity.Reserva;
+import br.com.easyaccess.easyaccess.messaging.ReservaNotificationDTO;
+import br.com.easyaccess.easyaccess.messaging.ReservaProducer;
 import br.com.easyaccess.easyaccess.repository.AreaComumRepository;
 import br.com.easyaccess.easyaccess.repository.MoradorRepository;
 import br.com.easyaccess.easyaccess.repository.ReservaRepository;
@@ -106,5 +108,12 @@ public class ReservaService {
     private Integer buscarProximoId() {
         Query query = entityManager.createNativeQuery("SELECT NVL(MAX(ID_RESERVA), 0) + 1 FROM T_EA_RESERVA");
         return ((Number) query.getSingleResult()).intValue();
+    }
+
+    @Autowired
+    private ReservaProducer reservaProducer;
+
+    public void criarReserva(ReservaNotificationDTO dto) {
+        reservaProducer.notificarReservaCriada(dto);
     }
 }
