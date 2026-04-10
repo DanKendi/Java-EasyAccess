@@ -37,3 +37,5 @@ out/
 .vscode/
 
 .env
+
+**/src/main/resources/easyaccess-firebase-service-account.json

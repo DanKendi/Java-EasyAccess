@@ -9,6 +9,8 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.Optional;
+
 public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
 
     @Modifying
@@ -33,4 +35,6 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
     @Transactional
     @Query(value = "CALL SP_DEL_USUARIO(:id_usuario)", nativeQuery = true)
     void deletarUsuario(@Param("id_usuario") Integer id_usuario);
+
+    Optional<Usuario> findByEmail(String email);
 }

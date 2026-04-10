@@ -1,5 +1,7 @@
 package br.com.easyaccess.easyaccess.controller.dto;
 
+import br.com.easyaccess.easyaccess.entity.enuns.Role;
+
 public class UsuarioResponseDTO {
 
     private Integer id;
@@ -10,13 +12,13 @@ public class UsuarioResponseDTO {
 
     private String senhaHash;
 
-    private String perfil;
+    private Role perfil;
 
 
     public UsuarioResponseDTO() {
     }
 
-    public UsuarioResponseDTO(Integer id, String nome, String email, String senhaHash, String perfil) {
+    public UsuarioResponseDTO(Integer id, String nome, String email, String senhaHash, Role perfil) {
         this.id = id;
         this.nome = nome;
         this.email = email;
@@ -53,11 +55,11 @@ public class UsuarioResponseDTO {
         this.senhaHash = senhaHash;
     }
 
-    public String getPerfil() {
+    public Role getPerfil() {
         return perfil;
     }
 
-    public void setPerfil(String perfil) {
+    public void setPerfil(Role perfil) {
         this.perfil = perfil;
     }
 

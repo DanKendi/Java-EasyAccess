@@ -1,6 +1,7 @@
 package br.com.easyaccess.easyaccess.entity;
 
 
+import br.com.easyaccess.easyaccess.entity.enuns.Role;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 
@@ -22,8 +23,9 @@ public class Usuario {
     @Column(nullable = false, name = "senha_hash")
     private String senhaHash;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private String perfil;
+    private Role perfil;
 
     public Integer getId() {
         return id;
@@ -57,11 +59,11 @@ public class Usuario {
         this.senhaHash = senhaHash;
     }
 
-    public String getPerfil() {
+    public Role getPerfil() {
         return perfil;
     }
 
-    public void setPerfil(String perfil) {
+    public void setPerfil(Role perfil) {
         this.perfil = perfil;
     }
 

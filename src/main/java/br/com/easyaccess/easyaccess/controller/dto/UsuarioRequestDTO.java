@@ -1,5 +1,6 @@
 package br.com.easyaccess.easyaccess.controller.dto;
 
+import br.com.easyaccess.easyaccess.entity.enuns.Role;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 
@@ -16,7 +17,7 @@ public class UsuarioRequestDTO {
     private String senhaHash;
 
     @NotNull
-    private String perfil;
+    private Role perfil;
 
     public String getNome() {
         return nome;
@@ -42,11 +43,11 @@ public class UsuarioRequestDTO {
         this.senhaHash = senhaHash;
     }
 
-    public String getPerfil() {
+    public Role getPerfil() {
         return perfil;
     }
 
-    public void setPerfil(String perfil) {
+    public void setPerfil(Role perfil) {
         this.perfil = perfil;
     }
 
