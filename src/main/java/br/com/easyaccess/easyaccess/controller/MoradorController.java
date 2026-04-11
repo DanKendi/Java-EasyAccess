@@ -6,6 +6,7 @@ import br.com.easyaccess.easyaccess.entity.Morador;
 import br.com.easyaccess.easyaccess.service.MoradorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,11 +19,13 @@ public class MoradorController {
     private MoradorService moradorService;
 
     @GetMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public List<MoradorResponseDTO> listarTodos(){
         return moradorService.buscarTodos();
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN') or @moradorSecurityService.isMoradorDono(#id, authentication.name)")
     public ResponseEntity<MoradorResponseDTO> buscarPorId(@PathVariable Integer id){
         return moradorService.buscarPorId(id)
                 .map(ResponseEntity::ok)
@@ -30,11 +33,13 @@ public class MoradorController {
     }
 
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public MoradorResponseDTO criar(@RequestBody MoradorRequestDTO requestDTO){
         return moradorService.salvarMorador(requestDTO);
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<MoradorResponseDTO> atualizar(@PathVariable Integer id, @RequestBody MoradorRequestDTO requestDTO){
         try {
             return ResponseEntity.ok(moradorService.atualizar(id, requestDTO));
@@ -44,6 +49,7 @@ public class MoradorController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> deletar(@PathVariable Integer id){
         moradorService.deletar(id);
         return ResponseEntity.noContent().build();

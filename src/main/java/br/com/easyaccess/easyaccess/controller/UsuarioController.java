@@ -6,6 +6,7 @@ import br.com.easyaccess.easyaccess.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,11 +19,13 @@ public class UsuarioController {
     private UsuarioService usuarioService;
 
     @GetMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public List<UsuarioResponseDTO> listarTodosUsuarios(){
         return usuarioService.buscarTodos();
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<UsuarioResponseDTO> buscarUsuarioPorId(@PathVariable Integer id){
         return usuarioService.buscarPorId(id)
                 .map(ResponseEntity::ok)
@@ -30,6 +33,7 @@ public class UsuarioController {
     }
 
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> criarUsuario(@RequestBody UsuarioRequestDTO requestDTO){
         usuarioService.salvarUsuario(requestDTO);
 
@@ -37,6 +41,7 @@ public class UsuarioController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<UsuarioResponseDTO> atualizarUsuario(@PathVariable Integer id, @RequestBody UsuarioRequestDTO requestDTO){
         try {
             usuarioService.atualizar(id, requestDTO);

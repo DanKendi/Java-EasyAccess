@@ -6,6 +6,7 @@ import br.com.easyaccess.easyaccess.entity.AreaComum;
 import br.com.easyaccess.easyaccess.service.AreaComumService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,11 +19,13 @@ public class AreaComumController {
     private AreaComumService areaComumService;
 
     @GetMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public List<AreaComumResponseDTO> listarTodasAreas(){
         return areaComumService.buscarTodasAreas();
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<AreaComumResponseDTO> buscarAreaPorId(@PathVariable Integer id){
         return areaComumService.buscarAreaPorId(id)
                 .map(ResponseEntity::ok)
@@ -30,11 +33,13 @@ public class AreaComumController {
     }
 
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public AreaComumResponseDTO criarArea(@RequestBody AreaComumRequestDTO requestDTO){
         return areaComumService.salvarArea(requestDTO);
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<AreaComumResponseDTO> atualizarArea(@PathVariable Integer id, @RequestBody AreaComumRequestDTO requestDTO){
         try {
             return ResponseEntity.ok(areaComumService.atualizarArea(id, requestDTO));
@@ -44,6 +49,7 @@ public class AreaComumController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> deletarArea(@PathVariable Integer id){
         areaComumService.deletar(id);
         return ResponseEntity.noContent().build();
