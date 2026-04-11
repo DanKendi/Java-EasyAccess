@@ -12,6 +12,7 @@ import br.com.easyaccess.easyaccess.repository.MoradorRepository;
 import br.com.easyaccess.easyaccess.repository.ReservaRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -36,6 +37,14 @@ public class ReservaService {
         Integer proximoId = buscarProximoId();
         reserva.setId(proximoId);
         Reserva reservaSalva = reservaRepository.save(reserva);
+        //Envio da msg
+        reservaProducer.notificarReservaCriada(new ReservaNotificationDTO(
+                reservaSalva.getId(),
+                reservaSalva.getMorador().getNome(),
+                reservaSalva.getAreaComum().getNome(),
+                reservaSalva.getStatus(),
+                reservaSalva.getData()
+        ));
         return toRespDTO(reservaSalva);
     }
 
@@ -115,5 +124,22 @@ public class ReservaService {
 
     public void criarReserva(ReservaNotificationDTO dto) {
         reservaProducer.notificarReservaCriada(dto);
+    }
+
+    @Transactional
+    public void atualizarStatus(Long id, String novoStatus) {
+        Reserva reserva = reservaRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Reserva não encontrada"));
+
+        reserva.setStatus(novoStatus);
+        reservaRepository.save(reserva);
+
+        reservaProducer.notificarReservaCriada(new ReservaNotificationDTO(
+                reserva.getId(),
+                reserva.getMorador().getNome(),
+                reserva.getAreaComum().getNome(),
+                novoStatus,
+                reserva.getData()
+        ));
     }
 }

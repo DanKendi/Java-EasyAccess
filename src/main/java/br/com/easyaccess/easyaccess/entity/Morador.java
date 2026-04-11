@@ -13,7 +13,7 @@ public class Morador {
     @Column(name = "id_morador")
     private Integer id;
 
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
     @JoinColumn(name = "usuario_id")
     private Usuario usuario;
 
@@ -65,5 +65,9 @@ public class Morador {
 
     public void setDataEntrada(Date dataEntrada) {
         this.dataEntrada = dataEntrada;
+    }
+
+    public String getNome() {
+        return this.usuario != null ? this.usuario.getNome() : null;
     }
 }
