@@ -4,6 +4,7 @@ import br.com.easyaccess.easyaccess.controller.dto.CondominioRequestDTO;
 import br.com.easyaccess.easyaccess.controller.dto.CondominioResponseDTO;
 import br.com.easyaccess.easyaccess.entity.Condominio;
 import br.com.easyaccess.easyaccess.service.CondominioService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,7 +35,7 @@ public class CondominioController {
 
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<Void> criarCondominio(@RequestBody CondominioRequestDTO requestDTO){
+    public ResponseEntity<Void> criarCondominio(@RequestBody @Valid CondominioRequestDTO requestDTO){
         // O service apenas executa a procedure
         condominioService.salvarCondominio(requestDTO);
 
@@ -45,7 +46,7 @@ public class CondominioController {
 
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<Void> atualizarCondominio(@PathVariable Integer id, @RequestBody CondominioRequestDTO requestDTO){
+    public ResponseEntity<Void> atualizarCondominio(@PathVariable Integer id, @RequestBody @Valid CondominioRequestDTO requestDTO){
         try {
             condominioService.atualizarCondominio(id, requestDTO);
             return ResponseEntity.noContent().build();

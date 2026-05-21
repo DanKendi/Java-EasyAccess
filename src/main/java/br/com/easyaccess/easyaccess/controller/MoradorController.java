@@ -4,6 +4,7 @@ import br.com.easyaccess.easyaccess.controller.dto.MoradorRequestDTO;
 import br.com.easyaccess.easyaccess.controller.dto.MoradorResponseDTO;
 import br.com.easyaccess.easyaccess.entity.Morador;
 import br.com.easyaccess.easyaccess.service.MoradorService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -34,13 +35,13 @@ public class MoradorController {
 
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
-    public MoradorResponseDTO criar(@RequestBody MoradorRequestDTO requestDTO){
+    public MoradorResponseDTO criar(@RequestBody @Valid MoradorRequestDTO requestDTO){
         return moradorService.salvarMorador(requestDTO);
     }
 
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<MoradorResponseDTO> atualizar(@PathVariable Integer id, @RequestBody MoradorRequestDTO requestDTO){
+    public ResponseEntity<MoradorResponseDTO> atualizar(@PathVariable Integer id, @RequestBody @Valid MoradorRequestDTO requestDTO){
         try {
             return ResponseEntity.ok(moradorService.atualizar(id, requestDTO));
         } catch (RuntimeException e){

@@ -5,6 +5,7 @@ import br.com.easyaccess.easyaccess.controller.dto.ReservaRequestDTO;
 import br.com.easyaccess.easyaccess.controller.dto.ReservaResponseDTO;
 import br.com.easyaccess.easyaccess.entity.Reserva;
 import br.com.easyaccess.easyaccess.service.ReservaService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -35,13 +36,13 @@ public class ReservaController {
 
     @PostMapping
     @PreAuthorize("hasAnyRole('ADMIN', 'MORADOR')")
-    public ReservaResponseDTO criarReserva(@RequestBody ReservaRequestDTO requestDTO){
+    public ReservaResponseDTO criarReserva(@RequestBody @Valid ReservaRequestDTO requestDTO){
         return reservaService.salvarReserva(requestDTO);
     }
 
     @PutMapping("/{id}")
     @PreAuthorize("hasAnyRole('ADMIN', 'MORADOR')")
-    public ResponseEntity<ReservaResponseDTO> atualizarReserva(@PathVariable Integer id, @RequestBody ReservaRequestDTO requestDTO){
+    public ResponseEntity<ReservaResponseDTO> atualizarReserva(@PathVariable Integer id, @RequestBody @Valid ReservaRequestDTO requestDTO){
         try {
             return ResponseEntity.ok(reservaService.atualizar(id, requestDTO));
         } catch (RuntimeException e){

@@ -4,6 +4,7 @@ import br.com.easyaccess.easyaccess.controller.dto.AreaComumRequestDTO;
 import br.com.easyaccess.easyaccess.controller.dto.AreaComumResponseDTO;
 import br.com.easyaccess.easyaccess.entity.AreaComum;
 import br.com.easyaccess.easyaccess.service.AreaComumService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -34,13 +35,13 @@ public class AreaComumController {
 
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
-    public AreaComumResponseDTO criarArea(@RequestBody AreaComumRequestDTO requestDTO){
+    public AreaComumResponseDTO criarArea(@RequestBody @Valid AreaComumRequestDTO requestDTO){
         return areaComumService.salvarArea(requestDTO);
     }
 
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<AreaComumResponseDTO> atualizarArea(@PathVariable Integer id, @RequestBody AreaComumRequestDTO requestDTO){
+    public ResponseEntity<AreaComumResponseDTO> atualizarArea(@PathVariable Integer id, @RequestBody @Valid AreaComumRequestDTO requestDTO){
         try {
             return ResponseEntity.ok(areaComumService.atualizarArea(id, requestDTO));
         } catch (RuntimeException e){

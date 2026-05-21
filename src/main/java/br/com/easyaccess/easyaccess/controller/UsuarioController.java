@@ -3,6 +3,7 @@ package br.com.easyaccess.easyaccess.controller;
 import br.com.easyaccess.easyaccess.controller.dto.UsuarioRequestDTO;
 import br.com.easyaccess.easyaccess.controller.dto.UsuarioResponseDTO;
 import br.com.easyaccess.easyaccess.service.UsuarioService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,7 +35,7 @@ public class UsuarioController {
 
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<Void> criarUsuario(@RequestBody UsuarioRequestDTO requestDTO){
+    public ResponseEntity<Void> criarUsuario(@RequestBody @Valid UsuarioRequestDTO requestDTO){
         usuarioService.salvarUsuario(requestDTO);
 
         return ResponseEntity.status(HttpStatus.CREATED).build();
@@ -42,7 +43,7 @@ public class UsuarioController {
 
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<UsuarioResponseDTO> atualizarUsuario(@PathVariable Integer id, @RequestBody UsuarioRequestDTO requestDTO){
+    public ResponseEntity<UsuarioResponseDTO> atualizarUsuario(@PathVariable Integer id, @RequestBody @Valid UsuarioRequestDTO requestDTO){
         try {
             usuarioService.atualizar(id, requestDTO);
             return ResponseEntity.noContent().build();
