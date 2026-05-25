@@ -11,7 +11,8 @@ import org.springframework.context.annotation.Configuration;
                 title = "EasyAccess",
                 description = "API EasyAccess v2"
         ),
-        servers = {@Server(url = "http://localhost:8080",description = "LOCAL"),}
+        servers = {@Server(url = "http://localhost:8080",description = "LOCAL"),
+        @Server(url = "https://java-easyaccess-production.up.railway.app/", description = "Railway")}
 )
 
 public class SwaggerConfig {
