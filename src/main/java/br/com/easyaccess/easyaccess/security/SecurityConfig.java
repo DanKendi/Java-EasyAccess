@@ -1,6 +1,5 @@
 package br.com.easyaccess.easyaccess.security;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -31,7 +30,7 @@ public class SecurityConfig {
                 .cors(cors -> cors.configurationSource(request -> {
                     CorsConfiguration config = new CorsConfiguration();
                     config.setAllowedOrigins(List.of("*"));
-                    config.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE"));
+                    config.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
                     config.setAllowedHeaders(List.of("*"));
                     return config;
                 }))
@@ -39,15 +38,24 @@ public class SecurityConfig {
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        // Públicas
+                        // Públicas — sem token
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/usuarios").permitAll()
+
+                        // /usuarios/me — qualquer usuário autenticado (ADMIN ou MORADOR)
+                        .requestMatchers(HttpMethod.GET, "/usuarios/me").authenticated()
+
+                        // Demais /usuarios/** — só ADMIN (o @PreAuthorize no controller reforça)
+                        .requestMatchers("/usuarios/**").hasRole("ADMIN")
+
                         // Só ADMIN
                         .requestMatchers("/condominios/**").hasRole("ADMIN")
-                        .requestMatchers("/areas-comuns/**").hasRole("ADMIN")
+                        .requestMatchers("/areascomuns/**").hasRole("ADMIN")
+
                         // ADMIN ou MORADOR
                         .requestMatchers("/reservas/**").hasAnyRole("ADMIN", "MORADOR")
                         .requestMatchers("/moradores/**").hasAnyRole("ADMIN", "MORADOR")
+
                         // Qualquer autenticado
                         .anyRequest().authenticated()
                 )
